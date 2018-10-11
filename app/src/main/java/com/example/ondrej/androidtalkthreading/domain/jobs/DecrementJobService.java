@@ -12,27 +12,27 @@ import com.example.ondrej.androidtalkthreading.tools.AppExecutors;
 public class DecrementJobService extends JobService {
 
 
-    @Override public boolean onStartJob(JobParameters params) {
-        AppDatabase database = App.getDatabase();
-        Counter counter = database.counterDao().getCounter();
-        --counter.count;
-        database.counterDao().insert(counter);
-        App.getContext().sendBroadcast(Constants.getUpdateIntent());
-        return true;
-    }
-
 //    @Override public boolean onStartJob(JobParameters params) {
-//        Runnable task = () -> {
-//            AppDatabase database = App.getDatabase();
-//            Counter counter = database.counterDao().getCounter();
-//            --counter.count;
-//            database.counterDao().insert(counter);
-//            App.getContext().sendBroadcast(Constants.getUpdateIntent());
-//            jobFinished(params, false);
-//        };
-//        AppExecutors.getInstance().diskIO().execute(task);
-//        return false;
+//        AppDatabase database = App.getDatabase();
+//        Counter counter = database.counterDao().getCounter();
+//        --counter.count;
+//        database.counterDao().insert(counter);
+//        App.getContext().sendBroadcast(Constants.getUpdateIntent());
+//        return true;
 //    }
+
+    @Override public boolean onStartJob(JobParameters params) {
+        Runnable task = () -> {
+            AppDatabase database = App.getDatabase();
+            Counter counter = database.counterDao().getCounter();
+            --counter.count;
+            database.counterDao().insert(counter);
+            App.getContext().sendBroadcast(Constants.getUpdateIntent());
+            jobFinished(params, false);
+        };
+        AppExecutors.getInstance().diskIO().execute(task);
+        return false;
+    }
 
     @Override public boolean onStopJob(JobParameters params) {
         return false;

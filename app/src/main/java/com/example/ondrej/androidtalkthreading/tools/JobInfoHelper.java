@@ -12,7 +12,8 @@ public class JobInfoHelper {
 
     public static JobInfo getDecrementJob(Context context){
         JobInfo.Builder builder = new JobInfo.Builder(new Random().nextInt(), new ComponentName(context, DecrementJobService.class));
-        builder.setOverrideDeadline(0);
+        builder.setPersisted(false);
+        builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED);
         return builder.build();
 
     }
